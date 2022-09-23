@@ -2,7 +2,7 @@
 
 namespace MatchDataManager.Api.Services;
 
-public interface ITeamsService
+public interface ITeamService
 {
     void AddTeam(Team team);
     void DeleteTeam(Guid teamId);

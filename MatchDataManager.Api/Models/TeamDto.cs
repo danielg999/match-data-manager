@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MatchDataManager.Api.Models
 {
-    public class TeamDto
+    public class TeamDto : EntityDto
     {
         public string Name { get; set; }
 

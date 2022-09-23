@@ -1,11 +1,11 @@
-using MatchDataManager.Api.Entities;
+using MatchDataManager.Api.Models;
 using MatchDataManager.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MatchDataManager.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/location")]
 public class LocationController : ControllerBase
 {
     private readonly ILocationService _locationService;
@@ -14,44 +14,49 @@ public class LocationController : ControllerBase
     {
         _locationService = locationService;
     }
+
     [HttpPost]
-    public IActionResult AddLocation(Location location)
+    public IActionResult Create([FromBody] LocationCreateDto locationDto)
     {
-        _locationService.AddLocation(location);
-        return CreatedAtAction(nameof(GetById), new {id = location.Id}, location);
+        var id = _locationService.Create(locationDto);
+
+        return Created($"api/location/{id}", null);
     }
 
-    [HttpDelete]
-    public IActionResult DeleteLocation(Guid locationId)
+    [HttpDelete("{id}")]
+    public IActionResult Delete([FromRoute] Guid id)
     {
-        _locationService.DeleteLocation(locationId);
+        _locationService.Delete(id);
+
         return NoContent();
     }
 
     [HttpGet]
-    public IActionResult Get()
+    public IActionResult GetAll()
     {
-        var result = _locationService.GetAllLocations();
+        var locationsDtos = _locationService.GetAll();
 
-        return Ok(result);
+        return Ok(locationsDtos);
     }
 
-    [HttpGet("{id:guid}")]
-    public IActionResult GetById(Guid id)
+    [HttpGet("{id}")]
+    public IActionResult Get([FromRoute] Guid id)
     {
-        var location = _locationService.GetLocationById(id);
-        if (location is null)
+        var locationDto = _locationService.Get(id);
+
+        if (locationDto is null)
         {
             return NotFound();
         }
 
-        return Ok(location);
+        return Ok(locationDto);
     }
 
-    [HttpPut]
-    public IActionResult UpdateLocation(Location location)
+    [HttpPut("{id}")]
+    public IActionResult Update([FromRoute] Guid id, [FromBody] LocationUpdateDto locationDto)
     {
-        _locationService.UpdateLocation(location);
-        return Ok(location);
+        _locationService.Update(id, locationDto);
+
+        return Ok(locationDto);
     }
 }

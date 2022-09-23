@@ -1,12 +1,13 @@
 ﻿using MatchDataManager.Api.Entities;
+using MatchDataManager.Api.Models;
 
 namespace MatchDataManager.Api.Services;
 
-public interface ILocationsService
+public interface ILocationService
 {
-    void AddLocation(Location location);
-    void DeleteLocation(Guid locationId);
-    IEnumerable<Location> GetAllLocations();
-    Location GetLocationById(Guid id);
-    void UpdateLocation(Location location);
+    Guid Create(LocationCreateDto dto);
+    void Delete(Guid id);
+    IEnumerable<LocationDto> GetAll();
+    LocationDto Get(Guid id);
+    void Update(Guid id, LocationUpdateDto dto);
 }
