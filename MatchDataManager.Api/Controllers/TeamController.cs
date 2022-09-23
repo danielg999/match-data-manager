@@ -1,11 +1,12 @@
 using MatchDataManager.Api.Entities;
+using MatchDataManager.Api.Models;
 using MatchDataManager.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MatchDataManager.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/team")]
 public class TeamController : ControllerBase
 {
     private readonly ITeamService _teamService;
@@ -16,43 +17,46 @@ public class TeamController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult AddTeam(Team team)
+    public IActionResult Create([FromBody] TeamCreateDto team)
     {
-        _teamService.AddTeam(team);
-        return CreatedAtAction(nameof(GetById), new {id = team.Id}, team);
+        var id = _teamService.Create(team);
+
+        return Created($"api/team/{id}", null);
     }
 
-    [HttpDelete]
-    public IActionResult DeleteTeam(Guid teamId)
+    [HttpDelete("{id}")]
+    public IActionResult Delete([FromRoute] Guid id)
     {
-        _teamService.DeleteTeam(teamId);
+        _teamService.Delete(id);
+
         return NoContent();
     }
 
     [HttpGet]
-    public IActionResult Get()
+    public IActionResult GetAll()
     {
-        var result = _teamService.GetAllTeams();
+        var teamsDtos = _teamService.GetAll();
 
-        return Ok(result);
+        return Ok(teamsDtos);
     }
 
-    [HttpGet("{id:guid}")]
-    public IActionResult GetById(Guid id)
+    [HttpGet("{id}")]
+    public IActionResult Get([FromRoute] Guid id)
     {
-        var location = _teamService.GetTeamById(id);
-        if (location is null)
+        var teamDto = _teamService.Get(id);
+
+        if (teamDto is null)
         {
             return NotFound();
         }
 
-        return Ok(location);
+        return Ok(teamDto);
     }
 
-    [HttpPut]
-    public IActionResult UpdateTeam(Team team)
+    [HttpPut("{id}")]
+    public IActionResult Update([FromRoute] Guid id, [FromBody] TeamUpdateDto teamDto)
     {
-        _teamService.UpdateTeam(team);
-        return Ok(team);
+        _teamService.Update(id, teamDto);
+        return Ok(teamDto);
     }
 }

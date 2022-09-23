@@ -16,6 +16,9 @@ namespace MatchDataManager.Api
         {
             CreateMap<LocationCreateDto, Location>();
             CreateMap<Location, LocationDto>();
+
+            CreateMap<Team, TeamDto>();
+            CreateMap<TeamCreateDto, Team>();
         }
     }
 }
