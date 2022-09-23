@@ -1,12 +1,13 @@
 ﻿using MatchDataManager.Api.Entities;
+using MatchDataManager.Api.Models;
 
 namespace MatchDataManager.Api.Services;
 
 public interface ITeamService
 {
-    void AddTeam(Team team);
-    void DeleteTeam(Guid teamId);
-    IEnumerable<Team> GetAllTeams();
-    Team GetTeamById(Guid id);
-    void UpdateTeam(Team team);
+    Guid Create(TeamCreateDto team);
+    void Delete(Guid id);
+    IEnumerable<TeamDto> GetAll();
+    TeamDto Get(Guid id);
+    void Update(Guid id, TeamUpdateDto team);
 }
