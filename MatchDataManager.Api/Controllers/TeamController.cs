@@ -1,37 +1,46 @@
-using MatchDataManager.Api.Models;
-using MatchDataManager.Api.Repositories;
+using MatchDataManager.Api.Entities;
+using MatchDataManager.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MatchDataManager.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class TeamsController : ControllerBase
+public class TeamController : ControllerBase
 {
+    private readonly ITeamService _teamService;
+
+    public TeamController(ITeamService teamService)
+    {
+        _teamService = teamService;
+    }
+
     [HttpPost]
     public IActionResult AddTeam(Team team)
     {
-        TeamsRepository.AddTeam(team);
+        _teamService.AddTeam(team);
         return CreatedAtAction(nameof(GetById), new {id = team.Id}, team);
     }
 
     [HttpDelete]
     public IActionResult DeleteTeam(Guid teamId)
     {
-        TeamsRepository.DeleteTeam(teamId);
+        _teamService.DeleteTeam(teamId);
         return NoContent();
     }
 
     [HttpGet]
     public IActionResult Get()
     {
-        return Ok(TeamsRepository.GetAllTeams());
+        var result = _teamService.GetAllTeams();
+
+        return Ok(result);
     }
 
     [HttpGet("{id:guid}")]
     public IActionResult GetById(Guid id)
     {
-        var location = TeamsRepository.GetTeamById(id);
+        var location = _teamService.GetTeamById(id);
         if (location is null)
         {
             return NotFound();
@@ -43,7 +52,7 @@ public class TeamsController : ControllerBase
     [HttpPut]
     public IActionResult UpdateTeam(Team team)
     {
-        TeamsRepository.UpdateTeam(team);
+        _teamService.UpdateTeam(team);
         return Ok(team);
     }
 }

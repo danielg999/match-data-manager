@@ -1,18 +1,18 @@
-﻿using MatchDataManager.Api.Models;
+﻿using MatchDataManager.Api.Entities;
 
-namespace MatchDataManager.Api.Repositories;
+namespace MatchDataManager.Api.Services;
 
-public static class TeamsRepository
+public class TeamsService : ITeamsService
 {
-    private static readonly List<Team> _teams = new();
+    private readonly List<Team> _teams = new();
 
-    public static void AddTeam(Team team)
+    public void AddTeam(Team team)
     {
         team.Id = Guid.NewGuid();
         _teams.Add(team);
     }
 
-    public static void DeleteTeam(Guid teamId)
+    public void DeleteTeam(Guid teamId)
     {
         var team = _teams.FirstOrDefault(x => x.Id == teamId);
         if (team is not null)
@@ -21,17 +21,17 @@ public static class TeamsRepository
         }
     }
 
-    public static IEnumerable<Team> GetAllTeams()
+    public IEnumerable<Team> GetAllTeams()
     {
         return _teams;
     }
 
-    public static Team GetTeamById(Guid id)
+    public Team GetTeamById(Guid id)
     {
         return _teams.FirstOrDefault(x => x.Id == id);
     }
 
-    public static void UpdateTeam(Team team)
+    public void UpdateTeam(Team team)
     {
         var existingTeam = _teams.FirstOrDefault(x => x.Id == team.Id);
         if (existingTeam is null || team is null)

@@ -1,4 +1,4 @@
-﻿namespace MatchDataManager.Api.Models;
+﻿namespace MatchDataManager.Api.Entities;
 
 public class Team : Entity
 {

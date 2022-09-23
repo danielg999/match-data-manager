@@ -1,11 +1,11 @@
+using MatchDataManager.Api.Entities;
+using MatchDataManager.Api.Services;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+AddServices(builder.Services);
 
 var app = builder.Build();
 
@@ -23,3 +23,15 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+void AddServices(IServiceCollection services)
+{
+    services.AddControllers();
+    services.AddEndpointsApiExplorer();
+    services.AddSwaggerGen();
+
+    services.AddTransient<ILocationsService, LocationsService>();
+    services.AddTransient<ITeamsService, TeamsService>();
+
+    services.AddDbContext<MatchDataManagerDbContext>();
+}

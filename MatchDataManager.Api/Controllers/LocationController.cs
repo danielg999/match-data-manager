@@ -1,37 +1,45 @@
-using MatchDataManager.Api.Models;
-using MatchDataManager.Api.Repositories;
+using MatchDataManager.Api.Entities;
+using MatchDataManager.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MatchDataManager.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class LocationsController : ControllerBase
+public class LocationController : ControllerBase
 {
+    private readonly ILocationService _locationService;
+
+    public LocationController(ILocationService locationService)
+    {
+        _locationService = locationService;
+    }
     [HttpPost]
     public IActionResult AddLocation(Location location)
     {
-        LocationsRepository.AddLocation(location);
+        _locationService.AddLocation(location);
         return CreatedAtAction(nameof(GetById), new {id = location.Id}, location);
     }
 
     [HttpDelete]
     public IActionResult DeleteLocation(Guid locationId)
     {
-        LocationsRepository.DeleteLocation(locationId);
+        _locationService.DeleteLocation(locationId);
         return NoContent();
     }
 
     [HttpGet]
     public IActionResult Get()
     {
-        return Ok(LocationsRepository.GetAllLocations());
+        var result = _locationService.GetAllLocations();
+
+        return Ok(result);
     }
 
     [HttpGet("{id:guid}")]
     public IActionResult GetById(Guid id)
     {
-        var location = LocationsRepository.GetLocationById(id);
+        var location = _locationService.GetLocationById(id);
         if (location is null)
         {
             return NotFound();
@@ -43,7 +51,7 @@ public class LocationsController : ControllerBase
     [HttpPut]
     public IActionResult UpdateLocation(Location location)
     {
-        LocationsRepository.UpdateLocation(location);
+        _locationService.UpdateLocation(location);
         return Ok(location);
     }
 }
