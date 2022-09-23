@@ -2,7 +2,7 @@
 
 namespace MatchDataManager.Api.Services;
 
-public class TeamsService : ITeamsService
+public class TeamService : ITeamService
 {
     private readonly List<Team> _teams = new();
 

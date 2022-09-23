@@ -30,8 +30,9 @@ void AddServices(IServiceCollection services)
     services.AddEndpointsApiExplorer();
     services.AddSwaggerGen();
 
-    services.AddTransient<ILocationsService, LocationsService>();
-    services.AddTransient<ITeamsService, TeamsService>();
+    services.AddTransient<ILocationService, LocationService>();
+    services.AddTransient<ITeamService, TeamService>();
 
+    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     services.AddDbContext<MatchDataManagerDbContext>();
 }
