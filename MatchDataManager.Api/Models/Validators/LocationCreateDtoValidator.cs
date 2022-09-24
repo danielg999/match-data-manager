@@ -1,22 +1,23 @@
 ﻿using FluentValidation;
 using MatchDataManager.Api.Entities;
+using MatchDataManager.Api.Repository;
 
 namespace MatchDataManager.Api.Models.Validations
 {
     public class LocationCreateDtoValidator : AbstractValidator<LocationCreateDto>
     {
-        private readonly MatchDataManagerDbContext _dbContext;
+        private readonly ILocationRepository _locationRepository;
 
-        public LocationCreateDtoValidator(MatchDataManagerDbContext dbContext)
+        public LocationCreateDtoValidator(ILocationRepository locationRepository)
         {
-            _dbContext = dbContext;
+            _locationRepository = locationRepository;
 
             RuleFor(l => l.Name)
                 .NotEmpty()
                 .MaximumLength(255)
-                .Custom((value, context) =>
+                .Custom(async (value, context) =>
                 {
-                    var nameInUse = _dbContext.Locations.Any(l => l.Name == value);
+                    var nameInUse = await _locationRepository.IsAnyExistOnCreate(value);
                     if (nameInUse)
                     {
                         context.AddFailure("Name", "That name is taken.");

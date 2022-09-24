@@ -1,79 +1,76 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using MatchDataManager.Api.Entities;
 using MatchDataManager.Api.Exceptions;
 using MatchDataManager.Api.Models;
+using MatchDataManager.Api.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace MatchDataManager.Api.Services;
 
 public class TeamService : ITeamService
 {
-    private readonly MatchDataManagerDbContext _dbContext;
-    private readonly IMapper _mapper;
+    private readonly ITeamRepository _teamRepository;
+    private readonly IValidator<TeamCreateDto> _teamCreateDtoValidator;
+    private readonly IValidator<TeamUpdateDto> _teamUpdateDtoValidator;
 
-    public TeamService(MatchDataManagerDbContext dbContext, IMapper mapper)
+    public TeamService(ITeamRepository teamRepository, IValidator<TeamCreateDto> teamCreateDtoValidator, IValidator<TeamUpdateDto> teamUpdateDtoValidator)
     {
-        _dbContext = dbContext;
-        _mapper = mapper;
+        _teamRepository = teamRepository;
+        _teamCreateDtoValidator = teamCreateDtoValidator;
+        _teamUpdateDtoValidator = teamUpdateDtoValidator;
     }
 
     public async Task<Guid> Create(TeamCreateDto dto)
     {
-        var team = _mapper.Map<Team>(dto);
+        await CheckCreateValidation(dto);
+        return await _teamRepository.Create(dto);
 
-        team.Id = Guid.NewGuid();
-
-        _dbContext.Teams.Add(team);
-        await _dbContext.SaveChangesAsync();
-
-        return team.Id;
     }
 
-    public async Task Delete(Guid teamId)
+    public async Task Delete(Guid id)
     {
-        var team = await _dbContext.Teams.FirstOrDefaultAsync(x => x.Id == teamId);
-
-        if (team is null)
-        {
-            throw new NotFoundException("Team not found.");
-        }
-
-        _dbContext.Teams.Remove(team);
-        await _dbContext.SaveChangesAsync();
+        await _teamRepository.Delete(id);
     }
 
     public async Task<IEnumerable<TeamDto>> GetAll()
     {
-        var teams = await _dbContext.Teams.ToListAsync();
-        var teamsDto = _mapper.Map<List<TeamDto>>(teams);
-
-        return teamsDto;
+        return await _teamRepository.GetAll();
     }
 
     public async Task<TeamDto> Get(Guid id)
     {
-        var team = await _dbContext.Teams.FirstOrDefaultAsync(x => x.Id == id);
-        var teamDto = _mapper.Map<TeamDto>(team);
-
-        return teamDto;
+        return await _teamRepository.Get(id);
     }
 
     public async Task Update(TeamUpdateDto dto)
     {
-        var team = await _dbContext.Teams.FirstOrDefaultAsync(x => x.Id == dto.Id);
+        await CheckUpdateValidation(dto);
+        await _teamRepository.Update(dto);
+    }
 
-        if (dto is null)
+    public async Task CheckCreateValidation(TeamCreateDto dto)
+    {
+        var validations = _teamCreateDtoValidator.Validate(dto);
+
+        if (!validations.IsValid)
         {
-            throw new BadRequestException("Team doesn't exist.");
+            throw new BadRequestException(validations.Errors.ToString());
         }
-        else if (team is null)
+    }
+
+    public async Task CheckUpdateValidation(TeamUpdateDto dto)
+    {
+        var validations = _teamUpdateDtoValidator.Validate(dto);
+
+        if (!validations.IsValid)
         {
-            throw new NotFoundException("Team not found.");
+            throw new BadRequestException(validations.Errors.ToString());
         }
+    }
 
-        team.CoachName = dto.CoachName;
-        team.Name = dto.Name;
-
-        await _dbContext.SaveChangesAsync();
+    public async Task<int> CountAllTeams()
+    {
+        return await _teamRepository.CountAllTeams();
     }
 }
