@@ -56,9 +56,9 @@ public class LocationService : ILocationService
         return locationDto;
     }
 
-    public void Update(Guid id, LocationUpdateDto dto)
+    public void Update(LocationUpdateDto dto)
     {
-        var location = _dbContext.Locations.FirstOrDefault(x => x.Id == id);
+        var location = _dbContext.Locations.FirstOrDefault(x => x.Id == dto.Id);
 
         if (dto is null)
         {

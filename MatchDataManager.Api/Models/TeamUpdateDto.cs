@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MatchDataManager.Api.Models
+﻿namespace MatchDataManager.Api.Models
 {
     public class TeamUpdateDto
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
-
         public string CoachName { get; set; }
     }
 }

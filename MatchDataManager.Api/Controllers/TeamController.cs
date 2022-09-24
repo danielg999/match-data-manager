@@ -1,4 +1,3 @@
-using MatchDataManager.Api.Entities;
 using MatchDataManager.Api.Models;
 using MatchDataManager.Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -53,10 +52,10 @@ public class TeamController : ControllerBase
         return Ok(teamDto);
     }
 
-    [HttpPut("{id}")]
-    public IActionResult Update([FromRoute] Guid id, [FromBody] TeamUpdateDto teamDto)
+    [HttpPut]
+    public IActionResult Update([FromBody] TeamUpdateDto teamDto)
     {
-        _teamService.Update(id, teamDto);
+        _teamService.Update(teamDto);
         return Ok(teamDto);
     }
 }
