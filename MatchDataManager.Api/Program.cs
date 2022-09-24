@@ -1,6 +1,9 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using MatchDataManager.Api.Entities;
+using MatchDataManager.Api.Models;
+using MatchDataManager.Api.Models.Validations;
 using MatchDataManager.Api.Services;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,12 +30,18 @@ app.Run();
 void AddServices(IServiceCollection services)
 {
     services.AddControllers();
+    services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
     services.AddEndpointsApiExplorer();
     services.AddSwaggerGen();
 
     services.AddTransient<ILocationService, LocationService>();
     services.AddTransient<ITeamService, TeamService>();
 
-    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+    services.AddScoped<IValidator<LocationCreateDto>, LocationCreateDtoValidator>();
+    services.AddScoped<IValidator<LocationUpdateDto>, LocationUpdateDtoValidator>();
+    services.AddScoped<IValidator<TeamCreateDto>, TeamCreateDtoValidator>();
+    services.AddScoped<IValidator<TeamUpdateDto>, TeamUpdateDtoValidator>();
+
+    services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     services.AddDbContext<MatchDataManagerDbContext>();
 }

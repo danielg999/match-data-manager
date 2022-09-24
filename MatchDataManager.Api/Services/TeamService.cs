@@ -57,9 +57,9 @@ public class TeamService : ITeamService
         return teamDto;
     }
 
-    public void Update(Guid id, TeamUpdateDto dto)
+    public void Update(TeamUpdateDto dto)
     {
-        var team = _dbContext.Teams.FirstOrDefault(x => x.Id == id);
+        var team = _dbContext.Teams.FirstOrDefault(x => x.Id == dto.Id);
 
         if (dto is null)
         {

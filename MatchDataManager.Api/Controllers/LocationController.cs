@@ -52,10 +52,10 @@ public class LocationController : ControllerBase
         return Ok(locationDto);
     }
 
-    [HttpPut("{id}")]
-    public IActionResult Update([FromRoute] Guid id, [FromBody] LocationUpdateDto locationDto)
+    [HttpPut]
+    public IActionResult Update([FromBody] LocationUpdateDto locationDto)
     {
-        _locationService.Update(id, locationDto);
+        _locationService.Update(locationDto);
 
         return Ok(locationDto);
     }
