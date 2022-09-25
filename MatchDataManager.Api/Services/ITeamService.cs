@@ -4,13 +4,13 @@ namespace MatchDataManager.Api.Services;
 
 public interface ITeamService
 {
-    Guid Create(TeamCreateDto team);
+    Task<Guid> Create(TeamCreateDto team);
 
-    void Delete(Guid id);
+    Task Delete(Guid id);
 
-    IEnumerable<TeamDto> GetAll();
+    Task<IEnumerable<TeamDto>> GetAll();
 
-    TeamDto Get(Guid id);
+    Task<TeamDto> Get(Guid id);
 
-    void Update(TeamUpdateDto team);
+    Task Update(TeamUpdateDto team);
 }

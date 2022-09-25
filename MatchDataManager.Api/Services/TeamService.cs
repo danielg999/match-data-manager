@@ -2,6 +2,7 @@
 using MatchDataManager.Api.Entities;
 using MatchDataManager.Api.Exceptions;
 using MatchDataManager.Api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MatchDataManager.Api.Services;
 
@@ -16,21 +17,21 @@ public class TeamService : ITeamService
         _mapper = mapper;
     }
 
-    public Guid Create(TeamCreateDto dto)
+    public async Task<Guid> Create(TeamCreateDto dto)
     {
         var team = _mapper.Map<Team>(dto);
 
         team.Id = Guid.NewGuid();
 
         _dbContext.Teams.Add(team);
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync();
 
         return team.Id;
     }
 
-    public void Delete(Guid teamId)
+    public async Task Delete(Guid teamId)
     {
-        var team = _dbContext.Teams.FirstOrDefault(x => x.Id == teamId);
+        var team = await _dbContext.Teams.FirstOrDefaultAsync(x => x.Id == teamId);
 
         if (team is null)
         {
@@ -38,28 +39,28 @@ public class TeamService : ITeamService
         }
 
         _dbContext.Teams.Remove(team);
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync();
     }
 
-    public IEnumerable<TeamDto> GetAll()
+    public async Task<IEnumerable<TeamDto>> GetAll()
     {
-        var teams = _dbContext.Teams.ToList();
+        var teams = await _dbContext.Teams.ToListAsync();
         var teamsDto = _mapper.Map<List<TeamDto>>(teams);
 
         return teamsDto;
     }
 
-    public TeamDto Get(Guid id)
+    public async Task<TeamDto> Get(Guid id)
     {
-        var team = _dbContext.Teams.FirstOrDefault(x => x.Id == id);
+        var team = await _dbContext.Teams.FirstOrDefaultAsync(x => x.Id == id);
         var teamDto = _mapper.Map<TeamDto>(team);
 
         return teamDto;
     }
 
-    public void Update(TeamUpdateDto dto)
+    public async Task Update(TeamUpdateDto dto)
     {
-        var team = _dbContext.Teams.FirstOrDefault(x => x.Id == dto.Id);
+        var team = await _dbContext.Teams.FirstOrDefaultAsync(x => x.Id == dto.Id);
 
         if (dto is null)
         {
@@ -73,6 +74,6 @@ public class TeamService : ITeamService
         team.CoachName = dto.CoachName;
         team.Name = dto.Name;
 
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync();
     }
 }
