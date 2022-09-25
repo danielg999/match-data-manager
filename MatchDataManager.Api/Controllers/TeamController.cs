@@ -16,33 +16,33 @@ public class TeamController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create([FromBody] TeamCreateDto team)
+    public async Task<IActionResult> Create([FromBody] TeamCreateDto team)
     {
-        var id = _teamService.Create(team);
+        var id = await _teamService.Create(team);
 
         return Created($"api/team/{id}", null);
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete([FromRoute] Guid id)
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
-        _teamService.Delete(id);
+        await _teamService.Delete(id);
 
         return NoContent();
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var teamsDtos = _teamService.GetAll();
+        var teamsDtos = await _teamService.GetAll();
 
         return Ok(teamsDtos);
     }
 
     [HttpGet("{id}")]
-    public IActionResult Get([FromRoute] Guid id)
+    public async Task<IActionResult> Get([FromRoute] Guid id)
     {
-        var teamDto = _teamService.Get(id);
+        var teamDto = await _teamService.Get(id);
 
         if (teamDto is null)
         {
@@ -53,9 +53,9 @@ public class TeamController : ControllerBase
     }
 
     [HttpPut]
-    public IActionResult Update([FromBody] TeamUpdateDto teamDto)
+    public async Task<IActionResult> Update([FromBody] TeamUpdateDto teamDto)
     {
-        _teamService.Update(teamDto);
+        await _teamService.Update(teamDto);
         return Ok(teamDto);
     }
 }

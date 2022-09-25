@@ -16,33 +16,33 @@ public class LocationController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create([FromBody] LocationCreateDto locationDto)
+    public async Task<IActionResult> Create([FromBody] LocationCreateDto locationDto)
     {
-        var id = _locationService.Create(locationDto);
+        var id = await _locationService.Create(locationDto);
 
         return Created($"api/location/{id}", null);
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete([FromRoute] Guid id)
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
-        _locationService.Delete(id);
+        await _locationService.Delete(id);
 
         return NoContent();
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var locationsDtos = _locationService.GetAll();
+        var locationsDtos = await _locationService.GetAll();
 
         return Ok(locationsDtos);
     }
 
     [HttpGet("{id}")]
-    public IActionResult Get([FromRoute] Guid id)
+    public async Task<IActionResult> Get([FromRoute] Guid id)
     {
-        var locationDto = _locationService.Get(id);
+        var locationDto = await _locationService.Get(id);
 
         if (locationDto is null)
         {
@@ -53,9 +53,9 @@ public class LocationController : ControllerBase
     }
 
     [HttpPut]
-    public IActionResult Update([FromBody] LocationUpdateDto locationDto)
+    public async Task<IActionResult> Update([FromBody] LocationUpdateDto locationDto)
     {
-        _locationService.Update(locationDto);
+        await _locationService.Update(locationDto);
 
         return Ok(locationDto);
     }

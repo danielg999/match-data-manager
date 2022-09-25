@@ -4,13 +4,13 @@ namespace MatchDataManager.Api.Services;
 
 public interface ILocationService
 {
-    Guid Create(LocationCreateDto dto);
+    Task<Guid> Create(LocationCreateDto dto);
 
-    void Delete(Guid id);
+    Task Delete(Guid id);
 
-    IEnumerable<LocationDto> GetAll();
+    Task<IEnumerable<LocationDto>> GetAll();
 
-    LocationDto Get(Guid id);
+    Task<LocationDto> Get(Guid id);
 
-    void Update(LocationUpdateDto dto);
+    Task Update(LocationUpdateDto dto);
 }
