@@ -1,22 +1,31 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatchDataManager.Api", "MatchDataManager.Api\MatchDataManager.Api.csproj", "{29743F0C-25E4-4253-A539-95DA0E3332F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchDataManager.Api", "MatchDataManager.Api\MatchDataManager.Api.csproj", "{29743F0C-25E4-4253-A539-95DA0E3332F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatchDataManager.Tests", "MatchDataManager.Tests\MatchDataManager.Tests.csproj", "{7F6F841F-B4A6-40C2-986E-22708CD60E6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{29743F0C-25E4-4253-A539-95DA0E3332F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{29743F0C-25E4-4253-A539-95DA0E3332F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29743F0C-25E4-4253-A539-95DA0E3332F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29743F0C-25E4-4253-A539-95DA0E3332F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F6F841F-B4A6-40C2-986E-22708CD60E6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F6F841F-B4A6-40C2-986E-22708CD60E6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F6F841F-B4A6-40C2-986E-22708CD60E6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F6F841F-B4A6-40C2-986E-22708CD60E6A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {833C85AD-82FF-4D2B-A0B1-D16DB0C8E0B1}
 	EndGlobalSection
 EndGlobal

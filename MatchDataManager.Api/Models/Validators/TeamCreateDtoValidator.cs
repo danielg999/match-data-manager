@@ -1,22 +1,23 @@
 ﻿using FluentValidation;
 using MatchDataManager.Api.Entities;
+using MatchDataManager.Api.Repository;
 
 namespace MatchDataManager.Api.Models.Validations
 {
     public class TeamCreateDtoValidator : AbstractValidator<TeamCreateDto>
     {
-        private readonly MatchDataManagerDbContext _dbContext;
+        private readonly ITeamRepository _teamRepository;
 
-        public TeamCreateDtoValidator(MatchDataManagerDbContext dbContext)
+        public TeamCreateDtoValidator(ITeamRepository teamRepository)
         {
-            _dbContext = dbContext;
+            _teamRepository = teamRepository;
 
             RuleFor(t => t.Name)
                 .NotEmpty()
                 .MaximumLength(255)
-                .Custom((value, context) =>
+                .Custom(async (value, context) =>
                 {
-                    var nameInUse = _dbContext.Teams.Any(t => t.Name == value);
+                    var nameInUse = await _teamRepository.IsAnyExistOnCreate(value);
 
                     if (nameInUse)
                     {

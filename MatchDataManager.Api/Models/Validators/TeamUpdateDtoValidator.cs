@@ -1,15 +1,15 @@
 ﻿using FluentValidation;
-using MatchDataManager.Api.Entities;
+using MatchDataManager.Api.Repository;
 
 namespace MatchDataManager.Api.Models.Validations
 {
     public class TeamUpdateDtoValidator : AbstractValidator<TeamUpdateDto>
     {
-        private readonly MatchDataManagerDbContext _dbContext;
+        private readonly ITeamRepository _teamRepository;
 
-        public TeamUpdateDtoValidator(MatchDataManagerDbContext dbContext)
+        public TeamUpdateDtoValidator(ITeamRepository teamRepository)
         {
-            _dbContext = dbContext;
+            _teamRepository = teamRepository;
 
             RuleFor(t => t.Name)
                 .NotEmpty()
@@ -19,9 +19,9 @@ namespace MatchDataManager.Api.Models.Validations
                 .MaximumLength(55);
 
             RuleFor(t => new { t.Name, t.Id })
-                .Custom((value, context) =>
+                .Custom(async (value, context) =>
                 {
-                    var nameInUse = _dbContext.Teams.Any(t => t.Name == value.Name && t.Id != value.Id);
+                    var nameInUse = await _teamRepository.IsAnyExistOnUpdate(value.Name, value.Id);
 
                     if (nameInUse)
                     {
